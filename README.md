@@ -6,3 +6,4 @@ The ontology query service is an app that
   3.) the backend translates these questions in SPARQL queries and
   4.) displays the results
 
+use 'runApp("app")' to start it from within the R environment
