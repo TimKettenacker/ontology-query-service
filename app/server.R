@@ -1,8 +1,11 @@
+# !!! --- make sure "pid.xxxxx" is resolved to its real URL --- !!!
+
 library(rdflib)
 library(magrittr)
 library(shiny)
 library(shinydashboard)
 
+# competency questions
 
 input_file <- rdf_parse(choose.files(caption = "ontology to access"), format = c("guess"))
 
@@ -26,9 +29,9 @@ SELECT ?materials WHERE {?materials a :Material} ORDER BY ?materials'
 
 cq2 <- rdf_query(input_file, sparql_cq2)
 
-# Define server logic required to summarize and view the selected dataset
+# Define server logic required to display the selected question and its respective result
 shinyServer(function(input, output) {
-  
+  # visit https://shiny.rstudio.com/articles/basics.html ("Reactivity") for details
   # By declaring datasetInput as a reactive expression we ensure that:
   #
   #  1) It is only called when the inputs it depends on changes
@@ -41,26 +44,6 @@ shinyServer(function(input, output) {
            "Which materials are being used?" = cq2)
   })
   
-  # The output$caption is computed based on a reactive expression that
-  # returns input$caption. When the user changes the "caption" field:
-  #
-  #  1) This expression is automatically called to recompute the output 
-  #  2) The new caption is pushed back to the browser for re-display
-  # 
-  # Note that because the data-oriented reactive expressions below don't 
-  # depend on input$caption, those expressions are NOT called when 
-  # input$caption changes.
-  output$caption <- renderText({
-    input$caption
-  })
-  
-  # The output$summary depends on the datasetInput reactive expression, 
-  # so will be re-executed whenever datasetInput is invalidated
-  # (i.e. whenever the input$dataset changes)
-  output$summary <- renderPrint({
-    dataset <- datasetInput()
-    summary(dataset)
-  })
   
   # The output$view depends on both the databaseInput reactive expression
   # and input$obs, so will be re-executed whenever input$dataset or 
